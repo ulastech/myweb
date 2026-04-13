@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Fungsional Pendidikan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0B1F3A;
+      --navy-mid: #122848;
+      --gold: #C9993A;
+      --gold-light: #E8BB6A;
+      --cream: #F9F5EE;
+      --cream-dark: #EDE8DE;
+      --white: #FFFFFF;
+      --text: #2C2C2C;
+      --text-muted: #6B6B6B;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(11,31,58,0.96);
+      backdrop-filter: blur(12px);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      border-bottom: 1px solid rgba(201,153,58,0.25);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .nav-logo .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .nav-logo span {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.3px;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none; font-size: 0.875rem; font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--navy) !important;
+      padding: 8px 20px; border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 100px 5% 60px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -20%; right: -10%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(201,153,58,0.12) 0%, transparent 65%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -10%; left: -5%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(201,153,58,0.07) 0%, transparent 65%);
+      border-radius: 50%;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      position: relative; z-index: 1;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,153,58,0.15);
+      border: 1px solid rgba(201,153,58,0.35);
+      color: var(--gold-light);
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-tag::before { content: '●'; font-size: 8px; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      font-weight: 900; line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 20px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-desc {
+      font-size: 1.05rem; line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 36px;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 14px 28px; border-radius: 8px;
+      font-weight: 700; font-size: 0.95rem;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(201,153,58,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,153,58,0.4);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 28px; border-radius: 8px;
+      font-weight: 600; font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.05);
+    }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 48px;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+    .stat { border-left: 2px solid var(--gold); padding-left: 16px; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700; color: var(--white);
+    }
+    .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    /* Hero Right Visual */
+    .hero-visual {
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-card-main {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-card-main h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 1.2rem; margin-bottom: 20px;
+    }
+    .program-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .program-item {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 14px 16px;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .program-item:hover {
+      background: rgba(201,153,58,0.1);
+      border-color: rgba(201,153,58,0.3);
+    }
+    .prog-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .prog-icon.blue { background: rgba(59,130,246,0.2); }
+    .prog-icon.green { background: rgba(34,197,94,0.2); }
+    .prog-icon.orange { background: rgba(249,115,22,0.2); }
+    .prog-icon.purple { background: rgba(168,85,247,0.2); }
+    .prog-name { color: var(--white); font-weight: 500; font-size: 0.92rem; }
+    .prog-meta { color: rgba(255,255,255,0.45); font-size: 0.78rem; margin-top: 2px; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 90px 5%; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900; line-height: 1.2;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 1rem; line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ── ABOUT ── */
+    #tentang { background: var(--cream); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-bg {
+      width: 100%; aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      position: relative; overflow: hidden;
+    }
+    .about-image-bg::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 60%; height: 60%;
+      background: radial-gradient(circle, rgba(201,153,58,0.2), transparent);
+    }
+    .about-badge {
+      position: absolute; bottom: -20px; right: -20px;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 16px 20px; border-radius: 14px;
+      font-weight: 700; text-align: center;
+      box-shadow: 0 8px 24px rgba(201,153,58,0.4);
+    }
+    .about-badge .big { font-family: 'Playfair Display', serif; font-size: 2rem; display: block; }
+    .about-badge .small { font-size: 0.75rem; }
+    .values { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+    .value-item {
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .value-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: rgba(201,153,58,0.12);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .value-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+    .value-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── PROGRAM ── */
+    #program { background: var(--navy); }
+    #program h2, #program .section-label { color: var(--white); }
+    #program .section-desc { color: rgba(255,255,255,0.55); }
+    .program-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 48px;
+    }
+    .program-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 28px;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .program-card:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(201,153,58,0.4);
+      transform: translateY(-4px);
+    }
+    .card-icon {
+      font-size: 2.2rem; margin-bottom: 18px;
+      display: block;
+    }
+    .program-card h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .program-card p {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.88rem; line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .card-tag {
+      display: inline-block;
+      background: rgba(201,153,58,0.15);
+      color: var(--gold-light);
+      font-size: 0.75rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 100px;
+    }
+
+    /* ── BERITA ── */
+    #berita { background: var(--cream); }
+    .news-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 28px; margin-top: 48px;
+    }
+    .news-card {
+      background: var(--white);
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--cream-dark);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .news-card:hover {
+      box-shadow: 0 12px 36px rgba(11,31,58,0.1);
+      transform: translateY(-4px);
+    }
+    .news-thumb {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .news-thumb.t1 { background: linear-gradient(135deg, #1a3a6b, #0d2244); }
+    .news-thumb.t2 { background: linear-gradient(135deg, #3a6b1a, #1a3a0d); }
+    .news-thumb.t3 { background: linear-gradient(135deg, #6b3a1a, #3a1a0d); }
+    .news-body { padding: 22px; }
+    .news-cat {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .news-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--navy);
+      margin-bottom: 10px; line-height: 1.4;
+    }
+    .news-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 16px; }
+    .news-meta { font-size: 0.78rem; color: #aaa; }
+
+    /* ── KONTAK ── */
+    #kontak { background: var(--navy-mid); }
+    #kontak h2 { color: var(--white); }
+    #kontak .section-label { color: var(--gold); }
+    #kontak .section-desc { color: rgba(255,255,255,0.55); }
+    .kontak-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; margin-top: 48px;
+    }
+    .kontak-info { display: flex; flex-direction: column; gap: 24px; }
+    .kontak-item {
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .kontak-ic {
+      width: 46px; height: 46px; flex-shrink: 0;
+      background: rgba(201,153,58,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .kontak-item strong { color: var(--white); display: block; margin-bottom: 4px; }
+    .kontak-item span { color: rgba(255,255,255,0.55); font-size: 0.9rem; }
+    .form-group { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    input, textarea, select {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 13px 16px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
+    input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+    textarea { resize: vertical; min-height: 120px; }
+    select option { background: var(--navy); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 5%;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--white); font-size: 1.3rem; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    footer p { color: rgba(255,255,255,0.35); font-size: 0.85rem; }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin: 16px 0; }
+    .footer-links a {
+      color: rgba(255,255,255,0.45); font-size: 0.85rem;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold-light); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-grid, .about-grid, .kontak-grid { grid-template-columns: 1fr; gap: 40px; }
+      .program-grid, .news-grid { grid-template-columns: 1fr 1fr; }
+      .hero-visual { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .program-grid, .news-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">🏛️</div>
+    <span>UFP Nusantara</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#berita">Berita</a></li>
+    <li><a href="#kontak" class="nav-cta">Hubungi Kami</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="beranda">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">Unit Fungsional Pendidikan</div>
+      <h1>Mendidik untuk <em>Masa Depan</em> yang Lebih Baik</h1>
+      <p class="hero-desc">
+        Kami hadir sebagai pusat pengembangan pendidikan yang berfokus pada kualitas, inovasi, dan pemberdayaan seluruh komponen pendidikan demi generasi unggul bangsa.
+      </p>
+      <div class="hero-actions">
+        <a href="#program" class="btn-primary">Lihat Program</a>
+        <a href="#tentang" class="btn-secondary">Pelajari Lebih</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">1.200+</div>
+          <div class="stat-label">Peserta Didik</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">85</div>
+          <div class="stat-label">Tenaga Pendidik</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Program Aktif</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-main">
+        <h3>📚 Program Unggulan</h3>
+        <ul class="program-list">
+          <li class="program-item">
+            <div class="prog-icon blue">💻</div>
+            <div>
+              <div class="prog-name">Teknologi & Informatika</div>
+              <div class="prog-meta">240 Peserta · Aktif</div>
+            </div>
+          </li>
+          <li class="program-item">
+            <div class="prog-icon green">🌿</div>
+            <div>
+              <div class="prog-name">Sains & Lingkungan</div>
+              <div class="prog-meta">180 Peserta · Aktif</div>
+            </div>
+          </li>
+          <li class="program-item">
+            <div class="prog-icon orange">🎨</div>
+            <div>
+              <div class="prog-name">Seni & Kreativitas</div>
+              <div class="prog-meta">150 Peserta · Aktif</div>
+            </div>
+          </li>
+          <li class="program-item">
+            <div class="prog-icon purple">📊</div>
+            <div>
+              <div class="prog-name">Ekonomi & Kewirausahaan</div>
+              <div class="prog-meta">210 Peserta · Aktif</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TENTANG -->
+<section id="tentang">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-wrap reveal">
+        <div class="about-image-bg">🏫</div>
+        <div class="about-badge">
+          <span class="big">15+</span>
+          <span class="small">Tahun Pengalaman</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">Tentang Kami</span>
+        <h2>Membangun Fondasi Pendidikan yang Kuat & Berkarakter</h2>
+        <p class="section-desc">
+          Unit Fungsional Pendidikan Nusantara berdiri dengan misi menciptakan ekosistem belajar yang inklusif, inovatif, dan berorientasi pada pengembangan karakter serta kompetensi abad ke-21.
+        </p>
+        <div class="values">
+          <div class="value-item">
+            <div class="value-icon">🎯</div>
+            <div>
+              <div class="value-title">Visi Jelas</div>
+              <div class="value-desc">Menjadi unit pendidikan terdepan yang melahirkan generasi unggul, berkarakter, dan berdaya saing global.</div>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🤝</div>
+            <div>
+              <div class="value-title">Kolaboratif</div>
+              <div class="value-desc">Mendorong sinergi antara pendidik, peserta didik, orang tua, dan masyarakat dalam proses pembelajaran.</div>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">💡</div>
+            <div>
+              <div class="value-title">Inovatif</div>
+              <div class="value-desc">Mengintegrasikan teknologi dan metode pembelajaran modern untuk pengalaman belajar yang lebih efektif.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section id="program">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Program Kami</span>
+      <h2 style="color: var(--white);">Ragam Program untuk Setiap Potensi</h2>
+      <p class="section-desc">Dirancang untuk mengoptimalkan setiap bakat dan minat peserta didik melalui pendekatan holistik dan berbasis kompetensi.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card reveal">
+        <span class="card-icon">💻</span>
+        <h3>Teknologi & Informatika</h3>
+        <p>Pemrograman, literasi digital, robotika, dan kecerdasan buatan untuk mempersiapkan generasi digital yang kompeten.</p>
+        <span class="card-tag">240 Peserta</span>
+      </div>
+      <div class="program-card reveal">
+        <span class="card-icon">🔬</span>
+        <h3>Sains & Riset</h3>
+        <p>Pembelajaran berbasis eksperimen dan penelitian ilmiah untuk menumbuhkan jiwa saintis muda yang kritis dan analitis.</p>
+        <span class="card-tag">180 Peserta</span>
+      </div>
+      <div class="program-card reveal">
+        <span class="card-icon">🎨</span>
+        <h3>Seni & Budaya</h3>
+        <p>Pengembangan kreativitas melalui seni rupa, musik, tari, dan sastra dengan pendekatan kontemporer dan tradisional.</p>
+        <span class="card-tag">150 Peserta</span>
+      </div>
+      <div class="program-card reveal">
+        <span class="card-icon">📊</span>
+        <h3>Kewirausahaan</h3>
+        <p>Membangun jiwa enterpreneur sejak dini melalui simulasi bisnis, manajemen keuangan, dan inovasi produk.</p>
+        <span class="card-tag">210 Peserta</span>
+      </div>
+      <div class="program-card reveal">
+        <span class="card-icon">🌍</span>
+        <h3>Bahasa & Literasi</h3>
+        <p>Penguatan kemampuan bahasa Indonesia, Inggris, dan Mandarin melalui metode komunikatif dan immersif.</p>
+        <span class="card-tag">320 Peserta</span>
+      </div>
+      <div class="program-card reveal">
+        <span class="card-icon">⚽</span>
+        <h3>Olahraga & Kesehatan</h3>
+        <p>Program kebugaran, olahraga prestasi, dan pendidikan kesehatan untuk membentuk generasi yang sehat dan berprestasi.</p>
+        <span class="card-tag">200 Peserta</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BERITA -->
+<section id="berita">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Berita & Kegiatan</span>
+      <h2>Informasi Terkini</h2>
+      <p class="section-desc">Ikuti perkembangan terbaru kegiatan, prestasi, dan pengumuman dari unit pendidikan kami.</p>
+    </div>
+    <div class="news-grid">
+      <div class="news-card reveal">
+        <div class="news-thumb t1">🏆</div>
+        <div class="news-body">
+          <div class="news-cat">Prestasi</div>
+          <h3>Tim Robotika Raih Juara 1 Tingkat Nasional</h3>
+          <p>Tim robotika UFP Nusantara berhasil meraih juara pertama dalam Olimpiade Sains & Teknologi Nasional 2025.</p>
+          <div class="news-meta">📅 10 April 2026</div>
+        </div>
+      </div>
+      <div class="news-card reveal">
+        <div class="news-thumb t2">📢</div>
+        <div class="news-body">
+          <div class="news-cat">Pengumuman</div>
+          <h3>Pendaftaran Peserta Didik Baru Tahun Ajaran 2026/2027</h3>
+          <p>Pendaftaran resmi dibuka mulai 1 Mei 2026. Kuota terbatas, segera daftarkan putra-putri Anda.</p>
+          <div class="news-meta">📅 5 April 2026</div>
+        </div>
+      </div>
+      <div class="news-card reveal">
+        <div class="news-thumb t3">🎓</div>
+        <div class="news-body">
+          <div class="news-cat">Kegiatan</div>
+          <h3>Workshop Literasi Digital untuk Orang Tua dan Wali</h3>
+          <p>UFP Nusantara mengadakan workshop literasi digital gratis bagi orang tua dan wali peserta didik.</p>
+          <div class="news-meta">📅 1 April 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Hubungi Kami</span>
+      <h2>Ada Pertanyaan? Kami Siap Membantu</h2>
+      <p class="section-desc">Jangan ragu untuk menghubungi kami terkait informasi program, pendaftaran, atau kerja sama.</p>
+    </div>
+    <div class="kontak-grid">
+      <div class="kontak-info reveal">
+        <div class="kontak-item">
+          <div class="kontak-ic">📍</div>
+          <div>
+            <strong>Alamat</strong>
+            <span>Jl. Pendidikan Raya No. 45, Kec. Ilmu<br>Kota Nusantara, 12345</span>
+          </div>
+        </div>
+        <div class="kontak-item">
+          <div class="kontak-ic">📞</div>
+          <div>
+            <strong>Telepon</strong>
+            <span>(021) 1234-5678<br>0812-3456-7890</span>
+          </div>
+        </div>
+        <div class="kontak-item">
+          <div class="kontak-ic">✉️</div>
+          <div>
+            <strong>Email</strong>
+            <span>info@ufpnusantara.sch.id<br>humas@ufpnusantara.sch.id</span>
+          </div>
+        </div>
+        <div class="kontak-item">
+          <div class="kontak-ic">🕐</div>
+          <div>
+            <strong>Jam Operasional</strong>
+            <span>Senin – Jumat: 07.00 – 16.00<br>Sabtu: 07.00 – 12.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="form-group">
+          <div class="form-row">
+            <input type="text" placeholder="Nama Lengkap">
+            <input type="email" placeholder="Alamat Email">
+          </div>
+          <select>
+            <option value="" disabled selected>Pilih Keperluan</option>
+            <option>Informasi Program</option>
+            <option>Pendaftaran Peserta Didik</option>
+            <option>Kerja Sama & Kemitraan</option>
+            <option>Lainnya</option>
+          </select>
+          <textarea placeholder="Tuliskan pesan atau pertanyaan Anda di sini..."></textarea>
+          <button class="btn-primary" onclick="kirimPesan()" style="width:100%; font-size:1rem; padding:15px;">
+            Kirim Pesan →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🏛️ UFP Nusantara</div>
+  <div class="footer-links">
+    <a href="#beranda">Beranda</a>
+    <a href="#tentang">Tentang</a>
+    <a href="#program">Program</a>
+    <a href="#berita">Berita</a>
+    <a href="#kontak">Kontak</a>
+  </div>
+  <p>© 2026 Unit Fungsional Pendidikan Nusantara. Hak cipta dilindungi undang-undang.</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Kirim pesan dummy
+  function kirimPesan() {
+    alert('✅ Pesan berhasil dikirim!\nTim kami akan menghubungi Anda dalam 1×24 jam. Terima kasih!');
+  }
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--gold-light)' : '';
+    });
+  });
+</script>
+</body>
+</html>
